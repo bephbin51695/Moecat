@@ -8,7 +8,7 @@ if ($langid)
 	if(get_langfolder_cookie() != $lang_folder)
 	{
 		set_langfolder_cookie($lang_folder);
-		header("Location: " . $_SERVER['PHP_SELF']);
+		header("Location:" . $_SERVER['PHP_SELF']);
 	}
 }
 require_once(get_langfile_path("", false, $CURLANGDIR));
