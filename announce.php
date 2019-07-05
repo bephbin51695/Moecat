@@ -538,8 +538,9 @@ else // continue an existing session
 			
 		}
 		
-
+		//积分=积分+上传获得积分-下载扣除积分
 		//$USERUPDATESET[] = "seedbonus = seedbonus+".($trueupthis/1024/1024/50)."-".($downthis/1024/1024/50);
+		//积分=积分-下载扣除积分
 		$USERUPDATESET[] = "seedbonus = seedbonus -".($downthis/1024/1024/50);
 		
 		
