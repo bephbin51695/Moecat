@@ -9,7 +9,40 @@ include_once($rootpath . 'classes/class_advertisement.php');
 require_once($rootpath . get_langfile_path("functions.php"));
 //$tstart = getmicrotime();
 
+function to_curl($url){
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "$url",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "Accept: */*",
+            "Cache-Control: no-cache",
+            "Connection: keep-alive",
+            "Host: ipapi.co",
+            "Postman-Token: e430e49a-95b4-47f1-badb-3408a333d8bd,f0477372-9f91-4903-9cc1-49ae84971f75",
+            "User-Agent: PostmanRuntime/7.15.0",
+            "accept-encoding: gzip, deflate",
+            "cache-control: no-cache"
+        ),
+    ));
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    curl_close($curl);
+    if ($err) {
+        return ['code'=>0,"data"=>$err];
+    } else {
+        return ['code'=>1,"data"=>$response];
+    }
+}
+
 function convertip($ip) {
+    return "浙江";
+
     //IP数据文件路径
     $dat_path = 'include/qqwry.dat';
     //检查IP地址
@@ -169,13 +202,26 @@ function convertip($ip) {
     $ipaddr = preg_replace('/s*$/is', '', $ipaddr);
     if(preg_match('/http/i', $ipaddr) || $ipaddr == '') {
          return "IPV4";
-    }   
-	
+    }
     return ($ipaddr);
 }
 
 function convertipv6($ip,$clean=true) {
-	global $Cache;
+    global $Cache;
+
+    if (!$address = $Cache->get_value('ipAddress:'.$ip)){
+        $resJson = to_curl("https://ipapi.co/{$ip}/json/");
+        if($resJson['code']){
+            $address = json_decode($resJson['data'],true);
+            $address = "{$address['city']}[{$address['country']}]";
+            $Cache->cache_value('ipAddress:'.$ip, $address, 3600*24*7);
+        }else{
+            $address = "未知";
+        }
+    }
+    return $address;
+
+
 	if(preg_match("/[^0-9a-fA-F\:\.]/i",$ip))return '未知';
  	if (!$addr = $Cache->get_value('convertipv6_'.$ip.'_orgin')){
 		exec("include\\whereis.exe $ip && exit", $info);
