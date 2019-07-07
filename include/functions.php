@@ -23,8 +23,8 @@ function to_curl($url){
             "Accept: */*",
             "Cache-Control: no-cache",
             "Connection: keep-alive",
-            "Host: ipapi.co",
-            "Postman-Token: e430e49a-95b4-47f1-badb-3408a333d8bd,f0477372-9f91-4903-9cc1-49ae84971f75",
+            "Host: freeapi.ipip.net",
+            "Postman-Token: b7b9c2a7-c250-4cc8-938b-3250dc80360e,cc78add4-3fd6-4cca-ad09-1aa99c15eeed",
             "User-Agent: PostmanRuntime/7.15.0",
             "accept-encoding: gzip, deflate",
             "cache-control: no-cache"
@@ -41,7 +41,6 @@ function to_curl($url){
 }
 
 function convertip($ip) {
-    return "浙江";
 
     //IP数据文件路径
     $dat_path = 'include/qqwry.dat';
@@ -209,11 +208,11 @@ function convertip($ip) {
 function convertipv6($ip,$clean=true) {
     global $Cache;
 
-    if (!$address = $Cache->get_value('ipAddress:'.$ip)){
-        $resJson = to_curl("https://ipapi.co/{$ip}/json/");
+    if (!$address = $Cache->get_value('ipAddress:'.$ip) && trim($address) != ""){
+        $resJson = to_curl("http://freeapi.ipip.net/{$ip}");
         if($resJson['code']){
             $address = json_decode($resJson['data'],true);
-            $address = "{$address['city']}[{$address['country']}]";
+            $address = implode("",$address);
             $Cache->cache_value('ipAddress:'.$ip, $address, 3600*24*7);
         }else{
             $address = "未知";
