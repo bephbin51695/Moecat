@@ -81,7 +81,7 @@ else $thispagewidth=false;
 
 //if ($_POST["logout"] == "yes")
 //{
-	logincookie($row["id"], $passh,1,intval($_POST["logout"]),$securelogin_indentity_cookie, $ssl, $trackerssl,$thispagewidth);
+	logincookie($row["id"], $passh,1,intval($_POST["logout"])*3600,$securelogin_indentity_cookie, $ssl, $trackerssl,$thispagewidth);
 //}
 //
 setcookie("AssWeCan",'');
