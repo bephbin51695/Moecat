@@ -20,16 +20,12 @@ function bark($text = "")
   $text =  ($text == "" ? $lang_takelogin['std_login_fail_note'] : $text);
   stderr($lang_takelogin['std_login_fail'], $text,false);
 }
-//if ($iv == "yes"||$iv == "op")
-	//check_code ($_POST['imagehash'], $_POST['imagestring'],'login.php',true);
-if($_POST['logintype']=='uid')	
+if($_POST['logintype']=='uid')
 $res = sql_query("SELECT id, passhash, secret, enabled, status , logouttime, passkey FROM users WHERE id = " . sqlesc(0+$username));
 elseif($_POST['logintype']=='email')	
 $res = sql_query("SELECT id, passhash, secret, enabled, status , logouttime, passkey FROM users WHERE email='".mysql_real_escape_string($username)."'");
 else
 $res = sql_query("SELECT id, passhash, secret, enabled, status , logouttime, passkey FROM users WHERE username = " . sqlesc($username));
-
-
 
 
 $row = mysql_fetch_array($res);
@@ -40,7 +36,6 @@ if ($row['status'] == 'pending')
 	failedlogins($lang_takelogin['std_user_account_unconfirmed']);
 
 if ($row["passhash"] != md5($row["secret"] . $password . $row["secret"]))
-	//login_failedlogins($lang_takelogin['std_password_invalid']);
 	failedlogins($lang_takelogin['std_password_invalid']);
 
 if ($row["enabled"] == "no")
@@ -84,21 +79,11 @@ else
 if ($_POST["thispagewidth"] == "yes")$thispagewidth=true;
 else $thispagewidth=false;
 
-if ($_POST["logout"] == "yes")
-{
-	logincookie($row["id"], $passh,1,0x2A30,$securelogin_indentity_cookie, $ssl, $trackerssl,$thispagewidth);
-	//sessioncookie($row["id"], $passh,true);
-}
-else 
-{
-	logincookie($row["id"], $passh,1,0x7fffffff,$securelogin_indentity_cookie, $ssl, $trackerssl,$thispagewidth);
-	//sessioncookie($row["id"], $passh,false);
-}
-
-//if( TIMENOW <= $row['logouttime'] )sql_query("UPDATE users SET logouttime = ".sqlesc(TIMENOW-10)." WHERE id=" . sqlesc($row["id"]));
-
-//print("<iframe src=" . $pprefix . "$BASEURLV6/ipv6record.php?passkey=".$row["passkey"]." width=\"1\" height=\"1\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\"></iframe>");
-
+//if ($_POST["logout"] == "yes")
+//{
+	logincookie($row["id"], $passh,1,intval($_POST["logout"]),$securelogin_indentity_cookie, $ssl, $trackerssl,$thispagewidth);
+//}
+//
 setcookie("AssWeCan",'');
 
 if (!empty($_POST["returnto"]))
