@@ -610,8 +610,11 @@ function docleanup($forceAll = 0, $printProgress = false)
         if ($down_floor_gb) {
             $limit = $down_floor_gb * 1024 * 1024 * 1024;
             $maxdt = date("Y-m-d H:i:s", (TIMENOW - 86400 * 7 * $time_week));
-            $res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND uploaded >= {$limit} AND uploaded/(downloaded+1) >= {$minratio} AND hrwarned = 0 and added < " . sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
-            //$res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / downloaded >= $minratio AND added < ".sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
+            // $res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND uploaded >= {$limit} AND uploaded/(downloaded+1) >= {$minratio} AND hrwarned = 0 and added < " . sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
+            //return("SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / (downloaded+1) >= $minratio AND added < ".sqlesc($maxdt))
+
+            $sql = "SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / (downloaded+1) >= ".floatval($minratio)." AND added < ".sqlesc($maxdt);
+            $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
 
             if (mysql_num_rows($res) > 0) {
                 $dt = sqlesc(date("Y-m-d H:i:s"));
