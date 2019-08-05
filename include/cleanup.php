@@ -302,10 +302,10 @@ function docleanup($forceAll = 0, $printProgress = false)
         $dt = sqlesc(date("Y-m-d H:i:s", (TIMENOW - ($offervotetimeout_main))));
         $res = sql_query("SELECT id, name FROM offers WHERE added < $dt AND allowed <> 'allowed'") or sqlerr(__FILE__, __LINE__);
         while ($arr = mysql_fetch_assoc($res)) {
-            sql_query("DELETE FROM offers WHERE id=$arr[id]") or sqlerr(__FILE__, __LINE__);
-            sql_query("DELETE FROM offervotes WHERE offerid=$arr[id]") or sqlerr(__FILE__, __LINE__);
-            sql_query("DELETE FROM comments WHERE offer=$arr[id]") or sqlerr(__FILE__, __LINE__);
-            write_log("Offer $arr[id] ($arr[name]) was deleted by system (vote timeout)", 'normal');
+            sql_query("DELETE FROM offers WHERE id={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            sql_query("DELETE FROM offervotes WHERE offerid={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            sql_query("DELETE FROM comments WHERE offer={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            write_log("Offer {$arr['id']} ({$arr['name']}) was deleted by system (vote timeout)", 'normal');
         }
     }
     if ($printProgress) {
@@ -318,10 +318,10 @@ function docleanup($forceAll = 0, $printProgress = false)
         $dt = sqlesc(date("Y-m-d H:i:s", (TIMENOW - ($secs))));
         $res = sql_query("SELECT id, name FROM offers WHERE allowedtime < $dt AND allowed = 'allowed'") or sqlerr(__FILE__, __LINE__);
         while ($arr = mysql_fetch_assoc($res)) {
-            sql_query("DELETE FROM offers WHERE id=$arr[id]") or sqlerr(__FILE__, __LINE__);
-            sql_query("DELETE FROM offervotes WHERE offerid=$arr[id]") or sqlerr(__FILE__, __LINE__);
-            sql_query("DELETE FROM comments WHERE offer=$arr[id]") or sqlerr(__FILE__, __LINE__);
-            write_log("Offer $arr[id] ($arr[name]) was deleted by system (upload timeout)", 'normal');
+            sql_query("DELETE FROM offers WHERE id={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            sql_query("DELETE FROM offervotes WHERE offerid={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            sql_query("DELETE FROM comments WHERE offer={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            write_log("Offer {$arr['id']} ({$arr['name']}) was deleted by system (upload timeout)", 'normal');
         }
     }
     if ($printProgress) {
@@ -534,9 +534,9 @@ function docleanup($forceAll = 0, $printProgress = false)
             $modcom = sqlesc($modcomment);
             ///---end
             //sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = '0000-00-00 00:00:00', modcomment = $modcom WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-            sql_query("UPDATE users SET class = '1', vip_added = 'no', modcomment = $modcom WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
+            sql_query("UPDATE users SET class = '1', vip_added = 'no', modcomment = $modcom WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
 
-            sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, $arr[id], $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
+            sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
         }
     }
     if ($printProgress) {
@@ -557,9 +557,9 @@ function docleanup($forceAll = 0, $printProgress = false)
                 while ($arr = mysql_fetch_assoc($res)) {
                     $subject = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_low_ratio_warning_removed']);
                     $msg = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_your_ratio_warning_removed']);
-                    writecomment($arr[id], "Leech Warning removed by System.");
-                    sql_query("UPDATE users SET class = 1, leechwarn = 'no', leechwarnuntil = '0000-00-00 00:00:00' WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-                    sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);
+                    writecomment($arr['id'], "Leech Warning removed by System.");
+                    sql_query("UPDATE users SET class = 1, leechwarn = 'no', leechwarnuntil = '0000-00-00 00:00:00' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                    sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);
                 }
             }
         }
@@ -585,16 +585,16 @@ function docleanup($forceAll = 0, $printProgress = false)
     if (mysql_num_rows($res) > 0) {
         while ($arr = mysql_fetch_assoc($res)) {
             if ($arr['class'] < UC_USER || $arr['class'] >= UC_VIP || $arr['hrcount'] < 10) continue;
-            sql_query("UPDATE users SET class = " . UC_USER . " , hrwarned = " . sqlesc($arr['hrcount']) . " WHERE id = {$arr[id]}") or sqlerr(__FILE__, __LINE__);
+            sql_query("UPDATE users SET class = " . UC_USER . " , hrwarned = " . sqlesc($arr['hrcount']) . " WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
             if ($arr['class'] == UC_USER) continue;
             $dt = sqlesc(date("Y-m-d H:i:s"));
             $subject = "您被降级为" . get_user_class_name(UC_USER, false, false, true);
             $msg = "由于不达标HR数目过多,您被降级为[b]" . get_user_class_name(UC_USER, false, false, true) . "[/b]\n[url=faq.php#id27]常见问题--关于H&R[/url]\n[url=myhr.php]我的H&R[/url]\n[url=mybonus.php]14-免罪金牌[/url]";
-            sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+            sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
             $modcomment = htmlspecialchars($arr["modcomment"]);
             $modcomment = date("Y-m-d") . " - HR HIT @" . $arr['hrcount'] . ".\n" . $modcomment;
             $modcom = sqlesc($modcomment);
-            sql_query("UPDATE users SET modcomment = $modcom WHERE id = {$arr[id]}") or sqlerr(__FILE__, __LINE__);
+            sql_query("UPDATE users SET modcomment = $modcom WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
 
 
         }
@@ -610,11 +610,8 @@ function docleanup($forceAll = 0, $printProgress = false)
         if ($down_floor_gb) {
             $limit = $down_floor_gb * 1024 * 1024 * 1024;
             $maxdt = date("Y-m-d H:i:s", (TIMENOW - 86400 * 7 * $time_week));
-            // $res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND uploaded >= {$limit} AND uploaded/(downloaded+1) >= {$minratio} AND hrwarned = 0 and added < " . sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
-            //return("SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / (downloaded+1) >= $minratio AND added < ".sqlesc($maxdt))
-
-            $sql = "SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / (downloaded+1) >= ".floatval($minratio)." AND added < ".sqlesc($maxdt);
-            $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
+            $res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND uploaded >= {$limit} AND uploaded/(downloaded+1) >= {$minratio} AND hrwarned = 0 and added < " . sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
+            //$res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / downloaded >= $minratio AND added < ".sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
 
             if (mysql_num_rows($res) > 0) {
                 $dt = sqlesc(date("Y-m-d H:i:s"));
@@ -622,11 +619,11 @@ function docleanup($forceAll = 0, $printProgress = false)
                     $subject = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_promoted_to'] . get_user_class_name($class, false, false, true));
                     $msg = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_now_you_are'] . get_user_class_name($class, false, false, true) . $lang_cleanup_target[get_user_lang($arr['id'])]['msg_see_faq']);
                     if ($class <= $arr[max_class_once])
-                        sql_query("UPDATE users SET class = $class WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
+                        sql_query("UPDATE users SET class = $class WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
                     else {
-                        sql_query("UPDATE users SET class = $class, max_class_once=$class, invites=invites+$addinvite WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-                        if ($bakatest) sql_query("UPDATE users SET showdlnotice = 2 WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-                        sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);
+                        sql_query("UPDATE users SET class = $class, max_class_once=$class, invites=invites+$addinvite WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                        if ($bakatest) sql_query("UPDATE users SET showdlnotice = 2 WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                        sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);
                     }
                 }
             }
@@ -659,8 +656,8 @@ function docleanup($forceAll = 0, $printProgress = false)
             while ($arr = mysql_fetch_assoc($res)) {
                 $subject = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_demoted_to'] . get_user_class_name($newclass, false, false, true);
                 $msg = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_demoted_from'] . get_user_class_name($class, false, false, true) . $lang_cleanup_target[get_user_lang($arr['id'])]['msg_to'] . get_user_class_name($newclass, false, false, true) . $lang_cleanup_target[get_user_lang($arr['id'])]['msg_because_ratio_drop_below'] . $deratio . ".\n";
-                sql_query("UPDATE users SET class = $newclass WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+                sql_query("UPDATE users SET class = $newclass WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
             }
         }
     }
@@ -692,8 +689,8 @@ function docleanup($forceAll = 0, $printProgress = false)
             while ($arr = mysql_fetch_assoc($res)) {
                 $subject = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_demoted_to'] . get_user_class_name($newclass, false, false, true);
                 $msg = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_demoted_from'] . get_user_class_name($class, false, false, true) . $lang_cleanup_target[get_user_lang($arr['id'])]['msg_to'] . get_user_class_name($newclass, false, false, true) . "[/b]，因为你的上传量已低于" . mksize($limit) . ".\n";
-                sql_query("UPDATE users SET class = $newclass WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+                sql_query("UPDATE users SET class = $newclass WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
             }
         }
     }
@@ -729,8 +726,8 @@ function docleanup($forceAll = 0, $printProgress = false)
                 $subject = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_demoted_to'] . get_user_class_name(UC_PEASANT, false, false, true);
                 $msg = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_must_fix_ratio_within'] . $deletepeasant_account . $lang_cleanup_target[get_user_lang($arr['id'])]['msg_days_or_get_banned'];
                 writecomment($arr['id'], "Leech Warned by System - Low Ratio.");
-                sql_query("UPDATE users SET class = 0 , leechwarn = 'yes', leechwarnuntil = " . sqlesc($until) . " WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+                sql_query("UPDATE users SET class = 0 , leechwarn = 'yes', leechwarnuntil = " . sqlesc($until) . " WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
             }
         }
     }
@@ -753,7 +750,7 @@ function docleanup($forceAll = 0, $printProgress = false)
         while ($arr = mysql_fetch_assoc($res)) {
             writecomment($arr['id'], "Banned by System because of Leech Warning expired.");
 
-            sql_query("UPDATE users SET enabled = 'no', leechwarnuntil = '0000-00-00 00:00:00' WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
+            sql_query("UPDATE users SET enabled = 'no', leechwarnuntil = '0000-00-00 00:00:00' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
         }
     }
     if ($printProgress) {
@@ -770,8 +767,8 @@ function docleanup($forceAll = 0, $printProgress = false)
             $msg = $lang_cleanup_target[get_user_lang($arr['id'])]['msg_your_warning_removed'];
             writecomment($arr['id'], "Warning removed by System.");
 
-            sql_query("UPDATE users SET warned = 'no',uploadpos= 'yes',	forumpost= 'yes' , downloadpos= 'yes', warneduntil = '0000-00-00 00:00:00' WHERE id = $arr[id]") or sqlerr(__FILE__, __LINE__);
-            sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[id], $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+            sql_query("UPDATE users SET warned = 'no',uploadpos= 'yes',	forumpost= 'yes' , downloadpos= 'yes', warneduntil = '0000-00-00 00:00:00' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
         }
     }
     if ($printProgress) {
@@ -816,7 +813,7 @@ function docleanup($forceAll = 0, $printProgress = false)
             $subject = $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_your_torrent_deleted'];
             $msg = $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_your_torrent'] . "[i]" . $arr['name'] . "[/i]" . $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_was_deleted_because_dead'];
             sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $arr[owner], $dt, " . sqlesc($subject) . ", " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
-            write_log("Torrent $arr[id] ($arr[name]) is deleted by system because of being dead for a long time.", 'normal');
+            write_log("Torrent {$arr['id']} ({$arr['name']}) is deleted by system because of being dead for a long time.", 'normal');
         }
     }
     if ($printProgress) {
