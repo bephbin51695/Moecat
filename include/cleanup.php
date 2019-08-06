@@ -610,7 +610,7 @@ function docleanup($forceAll = 0, $printProgress = false)
         if ($down_floor_gb) {
             $limit = $down_floor_gb * 1024 * 1024 * 1024;
             $maxdt = date("Y-m-d H:i:s", (TIMENOW - 86400 * 7 * $time_week));
-            $res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND uploaded >= {$limit} AND uploaded/(downloaded+1) >= {$minratio} AND hrwarned = 0 and added < " . sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
+            $res = sql_query("SELECT id, max_class_once FROM users WHERE class = {$oriclass} AND uploaded >= {$limit} AND uploaded/downloaded >= {$minratio} AND hrwarned = 0 and added < " . sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
             //$res = sql_query("SELECT id, max_class_once FROM users WHERE class = $oriclass AND downloaded >= $limit AND uploaded / downloaded >= $minratio AND added < ".sqlesc($maxdt)) or sqlerr(__FILE__, __LINE__);
 
             if (mysql_num_rows($res) > 0) {
@@ -618,7 +618,7 @@ function docleanup($forceAll = 0, $printProgress = false)
                 while ($arr = mysql_fetch_assoc($res)) {
                     $subject = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_promoted_to'] . get_user_class_name($class, false, false, true));
                     $msg = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_now_you_are'] . get_user_class_name($class, false, false, true) . $lang_cleanup_target[get_user_lang($arr['id'])]['msg_see_faq']);
-                    if ($class <= $arr[max_class_once])
+                    if ($class <= $arr['max_class_once'])
                         sql_query("UPDATE users SET class = $class WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
                     else {
                         sql_query("UPDATE users SET class = $class, max_class_once=$class, invites=invites+$addinvite WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
