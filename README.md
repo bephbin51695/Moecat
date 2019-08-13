@@ -16,7 +16,7 @@ PHP 5.6.40
 [exec function](http://php.net/manual/en/function.exec.php)
 
 ## 因为时间太紧，我也有点懒，文件里面还有少许的蚂蚁PT的文字/图标（上线网站已删除）
-## 如果你要架设网站，请务必删除，谢谢
+## 如果你要架设网站，请务必删除（包括但不限于蚂蚁的标识，文字，图标等等），谢谢
 
 1.注意及时修改class_cache.php与class_cache_announce.php中第195行，选择合适的缓存器。
 
