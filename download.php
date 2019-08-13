@@ -57,7 +57,7 @@ if (@ini_get('output_handler') == 'ob_gzhandler' AND @ob_get_length() !== false)
 	header('Content-Encoding:');
 }
 */
-if ($_COOKIE["c_secure_tracker_ssl"] == base64("yeah"))
+if ($_COOKIE["c_secure_tracker_ssl"] == base64("yeah") or (int)$_GET["https"] == 1)
 $tracker_ssl = true;
 else
 $tracker_ssl = false;
