@@ -1,0 +1,184 @@
+[
+    {
+        "name": "psr/log",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/log.git",
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://mirrors.huaweicloud.com/repository/php/dist/psr/log/psr-log-1.1.0-6c001f1d.zip",
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+            "shasum": "20632f4f7e1bf2d8d71b7a07049aae0ff19bc09d"
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2018-11-20T15:27:04+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Log\\": "Psr/Log/"
+            }
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "homepage": "http://www.php-fig.org/",
+                "name": "PHP-FIG"
+            }
+        ],
+        "description": "Common interface for logging libraries",
+        "homepage": "https://github.com/php-fig/log",
+        "keywords": [
+            "log",
+            "psr",
+            "psr-3"
+        ]
+    },
+    {
+        "name": "psr/simple-cache",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/simple-cache.git",
+            "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://mirrors.huaweicloud.com/repository/php/dist/psr/simple-cache/psr-simple-cache-1.0.1-408d5eaf.zip",
+            "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+            "shasum": "28bacac5f1bb8b90f32d173c738dc03eb422f70f"
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2017-10-23T01:57:42+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\SimpleCache\\": "src/"
+            }
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "homepage": "http://www.php-fig.org/",
+                "name": "PHP-FIG"
+            }
+        ],
+        "description": "Common interfaces for simple caching",
+        "keywords": [
+            "cache",
+            "caching",
+            "psr",
+            "psr-16",
+            "simple-cache"
+        ]
+    },
+    {
+        "name": "topthink/think-helper",
+        "version": "v3.1.2",
+        "version_normalized": "3.1.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/top-think/think-helper.git",
+            "reference": "a629c4271fdf3d7e7c6d89089791417cb4796a2c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://mirrors.huaweicloud.com/repository/php/dist/topthink/think-helper/topthink-think-helper-v3.1.2-a629c427.zip",
+            "reference": "a629c4271fdf3d7e7c6d89089791417cb4796a2c",
+            "shasum": "3432721a312508ec0e3e71584a7c6fd856ec8c24"
+        },
+        "require": {
+            "php": ">=7.1.0"
+        },
+        "time": "2019-07-11T04:35:03+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/helper.php"
+            ],
+            "psr-4": {
+                "think\\": "src"
+            }
+        },
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "yunwuxin",
+                "email": "448901948@qq.com"
+            }
+        ],
+        "description": "The ThinkPHP6 Helper Package"
+    },
+    {
+        "name": "topthink/think-orm",
+        "version": "v2.0.15",
+        "version_normalized": "2.0.15.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/top-think/think-orm.git",
+            "reference": "a27dc4794fe681bf74e425b407ae951d8d7ae28b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://mirrors.huaweicloud.com/repository/php/dist/topthink/think-orm/topthink-think-orm-v2.0.15-a27dc479.zip",
+            "reference": "a27dc4794fe681bf74e425b407ae951d8d7ae28b",
+            "shasum": "39ce38af4a5367388270655a0a8a7b2bbeb9f9da"
+        },
+        "require": {
+            "php": ">=7.1.0",
+            "psr/log": "~1.0",
+            "psr/simple-cache": "^1.0",
+            "topthink/think-helper": "^3.1"
+        },
+        "time": "2019-07-14T02:35:15+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [],
+            "psr-4": {
+                "think\\": "src"
+            }
+        },
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "liu21st",
+                "email": "liu21st@gmail.com"
+            }
+        ],
+        "description": "think orm",
+        "keywords": [
+            "database",
+            "orm"
+        ]
+    }
+]
