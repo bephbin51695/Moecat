@@ -98,6 +98,8 @@ $small_descr=$_POST["small_descr"];
 $small_descr = form_second_name($small_descr);
 $name = form_second_name($name);
 	
+
+$updateset[] = "tags = " . sqlesc(0 + array_sum($_POST["tags"]));
 $updateset[] = "anonymous = '" . ($_POST["anonymous"] ? "yes" : "no") . "'";
 $updateset[] = "name = " . sqlesc($name);
 $updateset[] = "descr = " . sqlesc($descr);

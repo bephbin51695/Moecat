@@ -1578,6 +1578,7 @@ $row["small_descr"]=$get_second_name['medium'][$row["medium"]].$row["small_descr
 $row["small_descr"]=$get_second_name['standard'][$row["standard"]].$row["small_descr"];
 $row["small_descr"]=$get_second_name['team'][$row["team"]].$row["small_descr"];
 $row["small_descr"]=$get_second_name['processing'][$row["processing"]].$row["small_descr"];	
+
 	
 	
 	//torrent name
@@ -1713,10 +1714,33 @@ $row["small_descr"]=$get_second_name['processing'][$row["processing"]].$row["sma
 		{
 			$dissmall_descr=mb_strcut($dissmall_descr, 0, $max_lenght_of_small_descr+20,"UTF-8") . "..";
 		}*/
+		$picked_tags="";
+		for ($x=1; $x<=$row["tags"]; $x++){
+	        	if (($x & $row["tags"]) == $x){
+        	        	if ($x==1){
+				$picked_tags="<span style=\"background-color:#D74D4D;color:white;border-radius:15%\">禁转</span> ";
+				}
+        	        	if ($x==2){
+				$picked_tags=$picked_tags."<span style=\"background-color:#8F77B5;color:white;border-radius:15%\">首发</span> ";
+				}
+        	        	if ($x==4){
+				$picked_tags=$picked_tags."<span style=\"background-color:#2F7DB8;color:white;border-radius:15%\">官方</span> ";
+				}
+        	        	if ($x==8){
+				$picked_tags=$picked_tags."<span style=\"background-color:#787878;color:white;border-radius:15%\">自制</span> ";
+				}
+        	        	if ($x==16){
+				$picked_tags=$picked_tags."<span style=\"background-color:#FFAA32;color:white;border-radius:15%\">国语</span> ";
+				}
+        	        	if ($x==32){
+				$picked_tags=$picked_tags."<span style=\"background-color:#91B493;color:white;border-radius:15%\">中字</span> ";
+				}
+        		}
+        	}
 		print($dissmall_descr == "" ? "<a $short_torrent_name_alt $mouseovertorrent href=\"details.php?id=".$id."&amp;hit=1\">".$picked_torrent."<b>".htmlspecialchars($dispname)."</b>".$banned_torrent."</a>".$sp_torrent.
 		($imdbpicked_torrent||$subcount_torrent?"<br />".$imdbpicked_torrent.$subcount_torrent:"")
  : "<a $short_torrent_name_alt $mouseovertorrent href=\"details.php?id=".$id."&amp;hit=1\">".$picked_torrent."<b>".htmlspecialchars($dispname)."</b>".$banned_torrent."</a>".$sp_torrent
-."<br />".$imdbpicked_torrent.$subcount_torrent.htmlspecialchars($dissmall_descr));
+."<br />".$picked_tags.$imdbpicked_torrent.$subcount_torrent.htmlspecialchars($dissmall_descr));
 		
 	}
 
@@ -2685,7 +2709,6 @@ $a['processing'][$row[id]] = "[".$row[name]."]";
 $r = (sql_query("SELECT id,name FROM forums "));
 while ($row = mysql_fetch_array($r))
 $a['forums'][$row[id]] = "[".$row[name]."]";
-
 
 $Cache->cache_value('get_second_name', $a, 3600*24);
 	}

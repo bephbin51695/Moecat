@@ -229,6 +229,18 @@ elseif(($CURUSER["id"] == $row["owner"]||get_user_class() >= $torrentmanage_clas
 			"</select>";
 		}
 		tr($lang_edit['row_pick'], $pickcontent, 1);
+		$y=1;
+for ($x=1; $x<=$row["tags"]; $x++){
+	if (($x & $row["tags"]) == $x){
+                $tag_check[$y]="checked";
+	$y++;
+	}
+	else{
+	$tag_check[$y]="";
+	$y++;
+	}
+}
+		tr($lang_edit['row_tags'],"<input type=\"checkbox\" name=\"tags[]\"" . ($tag_check[1] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"1\" />禁转 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[2] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"2\" />首发 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[4] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"4\" />官方 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[8] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"8\" />自制 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[16] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"16\" />国语 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[32] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"32\" />中字",1);
 	}
 
 	print("<tr><td class=\"toolbox\" colspan=\"2\" align=\"center\"><input id=\"qr\" type=\"submit\" value=\"".$lang_edit['submit_edit_it']."\" onclick='javascript:{closealltags();this.disabled=true;this.form.submit()}' /> <input type=\"reset\" value=\"".$lang_edit['submit_revert_changes']."\" /></td></tr>\n");
@@ -330,7 +342,6 @@ elseif(($CURUSER["id"] == $row["owner"]||get_user_class() >= $torrentmanage_clas
 		$movecheckbox = "<input type=\"checkbox\" id=movecheck name=\"movecheck\" value=\"1\" onclick=\"disableother2('oricat','newcat')\" />";
 	}
 	tr($lang_edit['row_type']."<font color=\"red\">*</font>", $s.($allowmove ? "&nbsp;&nbsp;".$movecheckbox.$movenote.$s2 : ""), 1);
-	
 	
 	
 	print("<tr><td class=\"toolbox\" colspan=\"2\" align=\"center\"><input id=\"qr\" type=\"submit\" value=\"".$lang_edit['submit_edit_it']."\" /> <input type=\"reset\" value=\"".$lang_edit['submit_revert_changes']."\" /></td></tr>\n");

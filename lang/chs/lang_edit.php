@@ -67,6 +67,7 @@ $lang_edit = array
 	'text_team' => "文件格式",
 	'text_audio_codec' => "音频编码",
 	'row_content' => "内容",
+	'row_tags' => "标签",
 );
 
 ?>

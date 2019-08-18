@@ -261,9 +261,9 @@ stdhead($lang_upload['head_upload']);
 				{
 					tr($lang_upload['row_show_uploader'], "<input type=\"checkbox\" name=\"uplver\" value=\"yes\" />".$lang_upload['checkbox_hide_uploader_note'], 1);
 				}*/
-								tr($lang_upload['row_show_other'],"<input type=\"checkbox\" name=\"source\" value=\"yes\" checked ".(get_user_class()<= UC_VIP?"disabled":"")." >".$lang_upload['text_addsource']."\n".(get_user_class()>=$beanonymous_class? "<br/><input type=\"checkbox\" name=\"uplver\" value=\"yes\" />".$lang_upload['checkbox_hide_uploader_note']:""),1)
-			
-				?>
+								tr($lang_upload['row_show_other'],"<input type=\"checkbox\" name=\"source\" value=\"yes\" checked ".(get_user_class()<= UC_VIP?"disabled":"")." >".$lang_upload['text_addsource']."\n".(get_user_class()>=$beanonymous_class? "<br/><input type=\"checkbox\" name=\"uplver\" value=\"yes\" />".$lang_upload['checkbox_hide_uploader_note']:""),1);
+	tr($lang_upload['row_tags'],"<input type=\"checkbox\" name=\"tags[]\" value=\"1\" />禁转 <input type=\"checkbox\" name=\"tags[]\" value=\"2\" />首发 <input type=\"checkbox\" name=\"tags[]\" value=\"4\" />官方 <input type=\"checkbox\" name=\"tags[]\" value=\"8\" />自制 <input type=\"checkbox\" name=\"tags[]\" value=\"16\" />国语 <input type=\"checkbox\" name=\"tags[]\" value=\"32\" />中字",1);			
+	?>
 				<tr><td class="toolbox" align="center" colspan="2"><b><?php /*echo $lang_upload['text_read_rules']*/?></b> <input id="qr" type="button" onclick="javascript:{closealltags();this.form.submit();this.disabled=true;}"  value="<?php echo "&nbsp;&nbsp;".$lang_upload['submit_upload']."&nbsp;&nbsp;"?>" /></td></tr>
 		</table>
 	</form>

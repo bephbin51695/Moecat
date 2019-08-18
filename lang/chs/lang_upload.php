@@ -28,6 +28,7 @@ $lang_upload = array
 	'text_please_select_offer' => "&nbsp;&nbsp; 如果发布的是通过候选的资源，请选择该候选项目。投票用户会收到通知。",
 	'row_show_uploader' => "匿名发布",
 	'row_show_other' => "其他",
+	'row_tags' => "标签",
 	'checkbox_hide_uploader_note' => "不要在发布者项目中显示我的用户名",
 	'text_read_rules' => "我已经阅读过规则",
 	'submit_upload' => "发&nbsp;&nbsp;布",
