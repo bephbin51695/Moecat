@@ -581,6 +581,75 @@ document.getElementById("giftcustom").disabled = false;
 }
 }
 
+// givebonus.js
+function confirmgive(bonus)
+{
+	if   (confirm("Present "   +   bonus   +   " bonus as a gift?"))   return   true;
+	return false;
+}
+
+function givebonus(torrentid,bonus,bonus0)
+{
+
+	//  alert("aa");
+	if(confirmgive(bonus))
+	{
+
+		if(bonus<bonus0)
+		{
+
+			document.getElementById("nothanksbonus").innerHTML = "";
+			document.getElementById("addcuruserbonus").innerHTML = document.getElementById("curuserbonus").innerHTML+"("+bonus+".0)";
+			var list=ajax.posts('givebonus.php','torrentid='+torrentid+'&bonus='+bonus);
+			var aa="successful and thanks for "+bonus+" bonus!";
+			alert(aa);
+		}
+
+		else
+		{
+			var aa="failure:your bonus less than "+bonus;
+			alert(aa);
+		}
+
+	}
+}
+
+function givebonus0(torrentid,useridgift,bonus,bonus0)
+{
+
+	if(confirmgive(bonus))
+	{
+
+		if(bonus<bonus0)
+		{
+			var nothanksbonus="nothanksbonus"+torrentid;
+			var addcuruserbonus="addcuruserbonus"+torrentid;
+
+			document.getElementById(nothanksbonus).innerHTML = "";
+			document.getElementById(addcuruserbonus).innerHTML = document.getElementById("curuserbonus").innerHTML+"("+bonus+".0)";
+
+
+
+			var forumname=document.getElementById("spanforumname").innerHTML;
+			var subject=document.getElementById("spansubject").innerHTML;
+			var topicid=document.getElementById("spantopicid").innerHTML;
+			var forumid=document.getElementById("spanforumid").innerHTML;
+
+			var list=ajax.posts('givebon.php','torrentid='+torrentid+'&bonus='+bonus+'&useridgift='+useridgift+'&forumname='+forumname+'&subject='+subject+'&topicid='+topicid+'&forumid='+forumid);
+
+			var aa="successful and thanks for "+bonus+" bonus!";
+			alert(aa);
+		}
+
+		else
+		{
+			var aa="failure:your bonus less than "+bonus;
+			alert(aa);
+		}
+
+	}
+}
+
 function  notechangedis(name,hide){
 var id=document.getElementById("id"+name+"_sel");
 var dis=document.getElementById("dispid"+name+"_sel");

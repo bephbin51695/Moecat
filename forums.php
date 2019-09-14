@@ -809,6 +809,80 @@ if ($action == "viewtopic")
 		$secs = 900;
 		$dt = sqlesc(date("Y-m-d H:i:s",(TIMENOW - $secs))); // calculate date.
 		print("<tr><td valign=\"bottom\" style='border-top: 0px;padding: 0px;'>".$bodysignature."</td></tr>");
+
+        // start bonus
+        // block--------------//
+        $userid = $CURUSER ["id"]; // 当前使用者ID
+        $torrentid = $postid; // 回复帖子号，#234243
+        $useridgift = $posterid; // 这里取出来的是一个ID，回复的人的id
+        // 显示给过bonus的人和给bonus的值
+        $givebonusCount = $Cache->get_value('givebonus_pid_count_' . $torrentid);
+        $givebonusby = $Cache->get_value('givebonus_pid_givebonusby_' . $torrentid);
+        $nogivebonus = $Cache->get_value('givebonus_pid_nogivebonus_' . $torrentid);
+        $getbonusnow = $Cache->get_value('givebonus_pid_getbonusnow_' . $torrentid);
+        $givebonus_all = $Cache->get_value('givebonus_pid_givebonus_all_' . $torrentid);
+        if ($givebonusCount === false || $givebonusby === false || $nogivebonus === false || $getbonusnow === false || $givebonus_all === false) {
+            $givebonusby = "";
+            $nogivebonus = "";
+            $givebonus_sql0 = sql_query("SELECT bonus FROM givebonus WHERE bonustotorrentid=" . sqlesc($torrentid) . " and type=2");
+            $givebonusCount = mysql_num_rows($givebonus_sql0);
+            $getbonusnow = 0;
+            $givebonus_all = 0;
+            while ($rows_t0 = mysql_fetch_array($givebonus_sql0)) {
+                $getbonusnow += $rows_t0 ["bonus"];
+            }
+
+            if ($givebonusCount) {
+                $givebonus_sql = sql_query("SELECT bonusfromuserid,bonus FROM givebonus WHERE bonustotorrentid=" . sqlesc($torrentid) . " and type=2 ORDER BY id DESC LIMIT 20");
+                $givebonus_all = mysql_num_rows($givebonus_sql);
+                while ($rows_t = mysql_fetch_array($givebonus_sql)) {
+                    $bonusfrom_userid = $rows_t ["bonusfromuserid"];
+                    $bonusCnt = $rows_t ["bonus"];
+                    $bonusfromusername = get_username($bonusfrom_userid);
+
+                    $bonusfromusername = $bonusfromusername . "(" . $bonusCnt . ")";
+
+                    $givebonusby .= $bonusfromusername . " ";
+                }
+            } else {
+                $nogivebonus = $lang_forums ['text_no_givebonus_added'];
+            }
+
+            $Cache->cache_value('givebonus_pid_count_' . $torrentid, $givebonusCount, 300);
+            $Cache->cache_value('givebonus_pid_givebonusby_' . $torrentid, $givebonusby, 300);
+            $Cache->cache_value('givebonus_pid_nogivebonus_' . $torrentid, $nogivebonus, 300);
+            $Cache->cache_value('givebonus_pid_getbonusnow_' . $torrentid, $getbonusnow, 300);
+            $Cache->cache_value('givebonus_pid_givebonus_all_' . $torrentid, $givebonus_all, 300);
+        }
+
+        if ($userid != $useridgift) {
+            $bonus0 = $CURUSER ['seedbonus'];
+
+            $thanksbutton30 = "<input class=\"btn\" type=\"button\" id=\"thankbutton30\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",30," . $bonus0 . ");\" value=\"+30\" />";
+            $thanksbutton50 = "<input class=\"btn\" type=\"button\" id=\"thankbutton50\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",50," . $bonus0 . ");\" value=\"+50\" />";
+            $thanksbutton100 = "<input class=\"btn\" type=\"button\" id=\"thankbutton100\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",100," . $bonus0 . ");\" value=\"+100\" />";
+            $thanksbutton200 = "<input class=\"btn\" type=\"button\" id=\"thankbutton200\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",200," . $bonus0 . ");\" value=\"+200\" />";
+            $thanksbutton300 = "<input class=\"btn\" type=\"button\" id=\"thankbutton300\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",300," . $bonus0 . ");\" value=\"+300\" />";
+            $thanksbutton500 = "<input class=\"btn\" type=\"button\" id=\"thankbutton500\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",500," . $bonus0 . ");\" value=\"+500\" />";
+            $thanksbutton1000 = "<input class=\"btn\" type=\"button\" id=\"thankbutton1000\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",1000," . $bonus0 . ");\" value=\"+1000\" />";
+            $thanksbutton5000 = "<input class=\"btn\" type=\"button\" id=\"thankbutton5000\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",5000," . $bonus0 . ");\" value=\"+5000\" />";
+            $thanksbutton10000 = "<input class=\"btn\" type=\"button\" id=\"thankbutton10000\"  onclick=\"givebonus0(" . $torrentid . "," . $useridgift . ",10000," . $bonus0 . ");\" value=\"+10000\" />";
+
+            $nothanksbonusid = "nothanksbonus" . $torrentid;
+            $addcuruserbonusid = "addcuruserbonus" . $torrentid;
+
+            $tdleft = "<br /><label style=\" font-weight:normal\">" . $lang_forums ['text_get_now'] . ":&nbsp;" . $getbonusnow . "</label>";
+            //tr ( $lang_forums ['row_givebonus'] . $tdleft, "<span id=\"thanksbutton\">" . "&nbsp;&nbsp;" . $thanksbutton30 . "&nbsp;&nbsp;" . $thanksbutton50 . "&nbsp;&nbsp;" . $thanksbutton100 . "&nbsp;&nbsp;" . $thanksbutton200 . "&nbsp;&nbsp;" . $thanksbutton300 . "&nbsp;&nbsp;" . ((get_user_class () >= $postmanage_class || is_forum_moderator ( $topicid, 'topic' )) ? $thanksbutton500 . "&nbsp;&nbsp;" . $thanksbutton1000 . "&nbsp;&nbsp;" : "") . "<br /><br />" . "</span><span id=\"spanforumname\" style=\"display: none;\">" . $forumname . " </span>    <span id=\"spansubject\" style=\"display: none;\">" . $subject . " </span> <span id=\"spantopicid\" style=\"display: none;\">" . $topicid . " </span>  <span id=\"spanforumid\" style=\"display: none;\">" . $forumid . " </span> <span id=\"curuserbonus\" style=\"display: none;\">" . get_username ( $CURUSER ['id'] ) . " </span><span id=\"" . $nothanksbonusid . "\">" . $nogivebonus . "</span><span id=\"" . $addcuruserbonusid . "\"></span>" . $givebonusby . ($givebonus_all < $givebonusCount ? $lang_forums ['text_and_more'] . $givebonusCount . $lang_forums ['text_bonususer_in_total'] : ""), 1 );
+            //tr ( $lang_forums ['row_givebonus'] . $tdleft, "<span id=\"thanksbutton\">" . "&nbsp;&nbsp;" . $thanksbutton30 . "&nbsp;&nbsp;" . $thanksbutton50 . "&nbsp;&nbsp;" . $thanksbutton100 . "&nbsp;&nbsp;" . $thanksbutton200 . "&nbsp;&nbsp;" . $thanksbutton300 . "&nbsp;&nbsp;" . $thanksbutton500 . "&nbsp;&nbsp;" . $thanksbutton1000 . "&nbsp;&nbsp;" . "<br /><br />" . "</span><span id=\"spanforumname\" style=\"display: none;\">" . $forumname . " </span>    <span id=\"spansubject\" style=\"display: none;\">" . $subject . " </span> <span id=\"spantopicid\" style=\"display: none;\">" . $topicid . " </span>  <span id=\"spanforumid\" style=\"display: none;\">" . $forumid . " </span> <span id=\"curuserbonus\" style=\"display: none;\">" . get_username ( $CURUSER ['id'] ) . " </span><span id=\"" . $nothanksbonusid . "\">" . $nogivebonus . "</span><span id=\"" . $addcuruserbonusid . "\"></span>" . $givebonusby . ($givebonus_all < $givebonusCount ? $lang_forums ['text_and_more'] . $givebonusCount . $lang_forums ['text_bonususer_in_total'] : ""), 1 );
+            tr($lang_forums ['row_givebonus'] . $tdleft, "<span id=\"thanksbutton\">" . "&nbsp;&nbsp;" . $thanksbutton50 . "&nbsp;&nbsp;" . $thanksbutton100 . "&nbsp;&nbsp;" . $thanksbutton300 . "&nbsp;&nbsp;" . $thanksbutton500 . "&nbsp;&nbsp;" . $thanksbutton1000 . "&nbsp;&nbsp;" . $thanksbutton5000 . "&nbsp;&nbsp;" . $thanksbutton10000 . "&nbsp;&nbsp;" . "<br /><br />" . "</span><span id=\"spanforumname\" style=\"display: none;\">" . $forumname . " </span>    <span id=\"spansubject\" style=\"display: none;\">" . $subject . " </span> <span id=\"spantopicid\" style=\"display: none;\">" . $topicid . " </span>  <span id=\"spanforumid\" style=\"display: none;\">" . $forumid . " </span> <span id=\"curuserbonus\" style=\"display: none;\">" . get_username($CURUSER ['id']) . " </span><span id=\"" . $nothanksbonusid . "\">" . $nogivebonus . "</span><span id=\"" . $addcuruserbonusid . "\"></span>" . $givebonusby . ($givebonus_all < $givebonusCount ? $lang_forums ['text_and_more'] . $givebonusCount . $lang_forums ['text_bonususer_in_total'] : ""), 1);
+        } else {
+            $nothanksbonusid = "nothanksbonus" . $torrentid;
+            $addcuruserbonusid = "addcuruserbonus" . $torrentid;
+            $tdleft = "<br /><label style=\" font-weight:normal\">" . $lang_forums ['text_get_now'] . ":&nbsp;" . $getbonusnow . "</label>";
+            tr($lang_forums ['row_givebonus0'] . $tdleft, "<span id=\"curuserbonus\" style=\"display: none;\">" . get_username($CURUSER ['id']) . " </span>&nbsp;&nbsp;<span id=\"" . $nothanksbonusid . "\">" . $nogivebonus . "</span><span id=\"" . $addcuruserbonusid . "\"></span>" . $givebonusby . ($givebonus_all < $givebonusCount ? $lang_forums ['text_and_more'] . $givebonusCount . $lang_forums ['text_bonususer_in_total'] : ""), 1);
+        }
+        // ------------- end bonus block--------------//
+
 		print("<tr><td class=\"rowfollow\" align=\"center\" valign=\"middle\">".("'".$arr2['last_access']."'">$dt?"<img class=\"f_online\" src=\"pic/trans.gif\" alt=\"Online\" title=\"".$lang_forums['title_online']."\" />":"<img class=\"f_offline\" src=\"pic/trans.gif\" alt=\"Offline\" title=\"".$lang_forums['title_offline']."\" />" )."<a href=\"sendmessage.php?receiver=".htmlspecialchars(trim($arr2["id"]))."\"><img class=\"f_pm\" src=\"pic/trans.gif\" alt=\"PM\" title=\"".$lang_forums['title_send_message_to'].htmlspecialchars($arr2["username"])."\" /></a><a href=\"report.php?forumpost=$postid\"><img class=\"f_report\" src=\"pic/trans.gif\" alt=\"Report\" title=\"".$lang_forums['title_report_this_post']."\" /></a></td>");
 		print("<td class=\"toolbox\" align=\"right\">");
 

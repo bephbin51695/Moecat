@@ -199,6 +199,14 @@ $lang_forums = array
 	'text_topic_asc' => "发布时间升序",
 	'text_post_asc' => "最近回复升序",
 	'text_post_desc' => "最近回复降序",
+	'text_no_givebonus_added' => "暂无赠送魔力者",
+	'row_givebonus' => "赠送魔力",
+	'row_givebonus0' => "收到魔力",
+	'text_thanks_added' => "赠送魔力成功！",
+	'text_and_more' => "……（这里只显示最新记录。共",
+	'text_users_in_total' => "个用户赠送了魔力）",
+	'text_bonususer_in_total' => "个用户赠送了魔力）",
+	'text_get_now' => "当前收到",
 );
 
 ?>
