@@ -174,7 +174,7 @@ stdhead($lang_upload['head_upload']);
 				
 				if ($smalldescription_main == 'yes')
 				tr($lang_upload['row_small_description'], "<input type=\"text\" style=\"width: 650px;\" name=\"small_descr\" /><br /><b><font class=\"medium\" id=\"texttorrentsmaillnamenote\" >".$lang_upload['text_small_description_note']."</font></b>", 1);
-				
+                tr("外部链接", "<input type='text' id='external_url' name='external_url' style='width: 500px'>&nbsp;<input type='button' value='辅助填写' onclick='get_external_data()'>（辅助填写可为你填写IMDb链接和简介）<br><font class=\"medium\">来自<strong><a href=\"http://www.imdb.com\">IMDb</a> / <a href=\"https://movie.douban.com\">豆瓣</a> / <a href='https://store.steampowered.com'>Steam</a> / <a href='https://bangumi.tv/'>Bangumi</a></strong>的链接</font>", 1);
 				get_external_tr();
 				if ($enablenfo_main=='yes')
 					tr($lang_upload['row_nfo_file'], "<input type=\"file\" class=\"file\" name=\"nfo\" /><font class=\"medium\">".$lang_upload['text_only_viewed_by'].get_user_class_name($viewnfo_class,false,true,true).$lang_upload['text_or_above']."</font>", 1);

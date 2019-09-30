@@ -650,6 +650,29 @@ function givebonus0(torrentid,useridgift,bonus,bonus0)
 	}
 }
 
+function get_external_data() {
+	const url = $("#external_url").val();
+
+	if ($("#descr").val() && !confirm("辅助填写将删除已填写简介，是否继续？")) {
+		return;
+	}
+	let external_api_base_url = "pt-gen";
+	let api_url = "";
+	if (url.search("imdb.com") !== -1) {
+		api_url = external_api_base_url + "?site=douban&sid=" + /tt(\d+)/i.exec(url)[0];
+	} else {
+		api_url = external_api_base_url + "?url=" + url;
+	}
+	$.get(api_url, function (data) {
+		if (data.error !== null) {
+			alert(data.error);
+		} else {
+			$("#descr").val(data.format);
+			$("input[name='url'][type='text']").val(data.imdb_link);
+		}
+	});
+}
+
 function  notechangedis(name,hide){
 var id=document.getElementById("id"+name+"_sel");
 var dis=document.getElementById("dispid"+name+"_sel");
