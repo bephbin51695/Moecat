@@ -43,6 +43,9 @@ $lang_upload = array
 	'text_english_title' => "英文名:",
 	'text_titles_note' => "(如果英文名不存在，使用拼音或不填写)",
 	'text_addsource' => "添加源标签,方便转种(需要重新下载种子并重新做种)",
+	'refer_upload'=>"引用发布",
+	'refer_inupt'=>"被引用的种子ID：",
+	'refer_yes'=>"引用！",
 );
 
 ?>

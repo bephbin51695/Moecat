@@ -63,10 +63,11 @@ stdhead($lang_upload['head_upload']);
 						<?php echo $lang_upload['text_tracker_url'] ?><b>填不填写无所谓啦,填写什么也无所谓啦,填写本站首页地址也无所谓啦 ╮(╯_╰)╭</b>
 					</td>
 				</tr
-				
+
 
 				<?php
-				
+                    tr($lang_upload['refer_upload'], $lang_upload['refer_inupt'] . "\n" .
+                        "<input type=\"text\" id=\"referid\" name=\"referid\" size=5 />&nbsp;<input type=\"button\" value=\"" . $lang_upload['refer_yes'] . "\" onclick=\"javascript:location.href='upsimilartorrent.php?id=' + document.getElementById('referid').value;\">\n", 1);
 					//tr($lang_upload['row_torrent_file']."<font color=\"red\">*</font>", "<input type=\"file\" class=\"file\" id=\"torrent\" name=\"file\" onchange=\"getname()\" />", 1);
 					tr($lang_upload['row_torrent_file']."<font color=\"red\">*</font>", "<input type=\"file\" class=\"file\" id=\"torrent\" name=\"file\" accept=\"application/x-bittorrent\" /><br />转载的种子请直接上传原种子,以方便辅种", 1);
 						
