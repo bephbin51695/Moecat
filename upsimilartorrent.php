@@ -62,6 +62,16 @@ else{
     if (isset($_GET["returnto"]))
         print("<input type=\"hidden\" name=\"returnto\" value=\"" . htmlspecialchars($_GET["returnto"]) . "\" />");
     print("<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"98%\">\n");
+    print("<tr>
+					<td class='colhead' colspan='2' align='center'>
+					<font color=\"red\">请按照规则要求发布资源</font>
+					</td>
+				</tr>
+				<tr>
+					<td class='colhead' colspan='2' align='left'>"
+						.$lang_upload['text_tracker_url']."<b>填不填写无所谓啦,填写什么也无所谓啦,填写本站首页地址也无所谓啦 ╮(╯_╰)╭</b>
+					</td>
+				</tr>");
     tr("种子文件<font color=\"red\">*</font>", "<input type=\"file\" class=\"file\" id=\"torrent\" name=\"file\" />\n", 1);
     $s = "<select name=\"type\" id=\"browsecat\" onchange=\"javascript:secondtype();notechange()\" >";
     $cats = genrelist($sectionmode);
@@ -184,7 +194,18 @@ else{
         tr($lang_edit['row_content'],$team_select,1);
     }*/
     tr($lang_edit['row_check'], "<input type=\"checkbox\" name=\"visible\"" . ($row["visible"] == "yes" ? " checked=\"checked\"" : "" ) . " value=\"1\" /> ".$lang_edit['checkbox_visible']."&nbsp;&nbsp;&nbsp;".(get_user_class() >= $beanonymous_class || get_user_class() >= $torrentmanage_class ? "<input type=\"checkbox\" name=\"anonymous\"" . ($row["anonymous"] == "yes" ? " checked=\"checked\"" : "" ) . " value=\"1\" />".$lang_edit['checkbox_anonymous_note']."&nbsp;&nbsp;&nbsp;" : "").(get_user_class() >= $torrentmanage_class ? "<input type=\"checkbox\" name=\"banned\"" . (($row["banned"] == "yes") ? " checked=\"checked\"" : "" ) . " value=\"yes\" /> ".$lang_edit['checkbox_banned'] : ""), 1);
-
+    $y=1;
+    for ($x=1; $x<=$row["tags"]; $x++){
+        if (($x & $row["tags"]) == $x){
+            $tag_check[$y]="checked";
+            $y++;
+        }
+        else{
+            $tag_check[$y]="";
+            $y++;
+        }
+    }
+    tr($lang_edit['row_tags'],"<input type=\"checkbox\" name=\"tags[]\"" . ($tag_check[1] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"1\" />禁转 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[2] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"2\" />首发 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[4] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"4\" />官方 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[8] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"8\" />自制 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[16] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"16\" />国语 <input type=\"checkbox\" name=\"tags[]\" " . ($tag_check[32] == "checked" ? " checked=\"checked\"" : "" ) ."value=\"32\" />中字",1);
     print("<tr><td class=\"toolbox\" colspan=\"2\" align=\"center\"><input id=\"qr\" type=\"submit\" value=\"发布\" /> </td></tr>\n");
     print("</table>\n");
     print("</form>\n");
